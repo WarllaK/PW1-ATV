@@ -1,7 +1,7 @@
 import express from "express";
 const app = express();
 
-import Routes from "./router/Routes";
+import Routes from "./router/routes";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
