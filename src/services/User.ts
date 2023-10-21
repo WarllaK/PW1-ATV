@@ -26,7 +26,65 @@ const CheckUser = async (Data: any) => {
     }
   };
 
+
+  const FindTechnologies = async (Data: string) => {
+    try {
+      const data = await fs.readFile(database, "utf-8");
+      const jsonData = JSON.parse(data);
+      const user = jsonData.find(
+        (user: { username: string }) => user.username === Data
+      );
+      return user.technologies;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const SaveTechonolgy = async (Data: {}, User: string) => {
+    try {
+      const data = await fs.readFile(database, "utf-8");
+      const jsonData = JSON.parse(data);
+      const user = jsonData.find(
+        (user: { username: string }) => user.username === User
+      );
+      user.technologies.push(Data);
+      fs.writeFile(database, JSON.stringify(jsonData));
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  
+const UpdateTechnology = async (
+    Data: { title: string; deadline: Date },
+    Id: string,
+    User: string
+  ) => {
+    try {
+      const data = await fs.readFile(database, "utf-8");
+      const jsonData = JSON.parse(data);
+      const user = jsonData.find(
+        (user: { username: string }) => user.username === User
+      );
+      const technology = user.technologies;
+      technology.map((element: { id: string; title: string; deadline: Date }) => {
+        if (element.id === Id) {
+          element.title = Data.title;
+          element.deadline = Data.deadline;
+        }
+      });
+      await fs.writeFile(database, JSON.stringify(jsonData));
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 export default {
     SaveUser,
     CheckUser,
+    FindTechnologies,
+    SaveTechonolgy,
+    UpdateTechnology,
 }
