@@ -93,9 +93,55 @@ const UpdateTechnology = async (req: Request, res: Response) => {
   }
 };
 
+const UpdateStatus = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const username = req.headers.username as string;
+  
+    if (id === "" || id === null) {
+      return res.status(404).json({ error: "Tecnolgoia não encontrda" });
+    }
+    try {
+      const State = await User.CheckIdTechnology(username, id);
+      if (State === false) {
+        return res
+          .status(404)
+          .json({ error: "ID fornecido não corresponde a nenhuma tecnologia" });
+      }
+      const user = await User.UpdateStatus(id, username);
+      res.status(204).json(user);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Erro interno no servidor" });
+    }
+  };
+  
+  const DeleteTechnology = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const username = req.headers.username as string;
+  
+    if (id === "" || id === null) {
+      return res.status(404).json({ error: "Tecnolgoia não encontrda" });
+    }
+    try {
+      const State = await User.CheckIdTechnology(username, id);
+      if (State === false) {
+        return res
+          .status(404)
+          .json({ error: "ID fornecido não corresponde a nenhuma tecnologia" });
+      }
+      const user = await User.DeleteTechnology(username, id);
+      res.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Erro interno no servidor" });
+    }
+  };
+
 export default {
     CreateUser,
     TechnologiesUser,
     CreateTechnologies,
     UpdateTechnology,
+    UpdateStatus,
+    DeleteTechnology,
 }
