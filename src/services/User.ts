@@ -13,4 +13,20 @@ const SaveUser = async (Data: {}) => {
   }
 };
 
-export default SaveUser;
+const CheckUser = async (Data: any) => {
+    try {
+      const data = await fs.readFile(database, "utf-8");
+      const jsonData = JSON.parse(data);
+      const response = jsonData.some(
+        (User: { username: string }) => User.username === Data
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export default {
+    SaveUser,
+    CheckUser,
+}
