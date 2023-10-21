@@ -81,10 +81,65 @@ const UpdateTechnology = async (
     }
   };
 
+  const UpdateStatus = async (Id: string, User: string) => {
+    try {
+      const data = await fs.readFile(database, "utf-8");
+      const jsonData = JSON.parse(data);
+      const user = jsonData.find(
+        (user: { username: string }) => user.username === User
+      );
+      const technology = user.technologies;
+      technology.map((element: { studied: boolean; id: string }) => {
+        if (element.id === Id) {
+          element.studied = !element.studied;
+        }
+      });
+      await fs.writeFile(database, JSON.stringify(jsonData));
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const DeleteTechnology = async (User: string, Id: string) => {
+    try {
+      const data = await fs.readFile(database, "utf-8");
+      const jsonData = JSON.parse(data);
+      const user = jsonData.find(
+        (user: { username: string }) => user.username === User
+      );
+      user.technologies = user.technologies.filter(
+        (element: { id: string }) => element.id !== Id
+      );
+      await fs.writeFile(database, JSON.stringify(jsonData));
+      return user;
+    } catch (error) {
+      console.log;
+    }
+  };
+
+  const CheckIdTechnology = async (User: string, Id: string) => {
+    try {
+      const data = await fs.readFile(database, "utf-8");
+      const jsonData = JSON.parse(data);
+      const user = jsonData.find(
+        (user: { username: string }) => user.username === User
+      );
+      const state = user.technologies.some(
+        (user: { id: string }) => user.id === Id
+      );
+      return state;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 export default {
     SaveUser,
     CheckUser,
     FindTechnologies,
     SaveTechonolgy,
     UpdateTechnology,
+    UpdateStatus,DeleteTechnology,
+    CheckIdTechnology,
 }
